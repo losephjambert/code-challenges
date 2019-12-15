@@ -1,3 +1,5 @@
+// not solved yet
+
 function mergeRanges(meetings) {
   // what do we want our product to do if there are no meetings?
   if (!meetings.length) {
