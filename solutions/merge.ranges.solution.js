@@ -1,39 +1,30 @@
-// not solved yet
-
 function mergeRanges(meetings) {
-  // what do we want our product to do if there are no meetings?
-  if (!meetings.length) {
-    return `There are currently no scheduled meetings. Party!`;
-  }
+  const sortedMeetings = meetings.sort((a, b) => a.startTime - b.startTime);
+  const mergedMeetings = [sortedMeetings[0]];
 
-  // the simplest test would be 1 meeting
-  if (meetings.length === 1) {
-    return meetings;
-  }
-
-  const mergedMeetings = [];
-
-  // the next test would be 2 meetings
-  if (meetings.length === 2) {
-    for (let i = 0; i < meetings.length - 1; i++) {
-      const mostRecentlyProcessedMeeting = mergedMeetings[mergedMeetings.length - 1];
-      const meetingA = meetings[i];
-      const meetingB = meetings[i + 1];
-      if (meetingA.endTime >= meetingB.startTime) {
-        mergedMeetings.push(mergeMeetingTimes(meetingA, meetingB));
-      } else {
-        mergedMeetings.push(meetingA);
-      }
+  // return mergedMeetings
+  for (let i = 1; i < meetings.length; i++) {
+    const mostRecentlyMergedMeeting = mergedMeetings[mergedMeetings.length - 1];
+    const currentMeeting = sortedMeetings[i];
+    if (mostRecentlyMergedMeeting.endTime >= currentMeeting.startTime) {
+      mergedMeetings[mergedMeetings.length - 1] = mergeMeetings(
+        mostRecentlyMergedMeeting,
+        currentMeeting
+      );
+    } else {
+      mergedMeetings.push(currentMeeting);
     }
   }
 
   return mergedMeetings;
 }
 
-function mergeMeetingTimes(meetingA, meetingB) {
+function mergeMeetings(m1, m2) {
+  const sT = m1.startTime < m2.startTime ? m1.startTime : m2.startTime;
+  const eT = m1.endTime > m2.endTime ? m1.endTime : m2.endTime;
   return {
-    startTime: meetingA.startTime,
-    endTime: meetingB.endTime,
+    startTime: sT,
+    endTime: eT,
   };
 }
 
